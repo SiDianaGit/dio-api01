@@ -29,7 +29,7 @@ git clone [https://github.com/SEU_USUARIO/conversor-temperatura-api.git](https:/
 cd conversor-temperatura-api
 ```
 
-###2. Criar e Ativar o Ambiente Virtual
+### 2. Criar e Ativar o Ambiente Virtual
 É uma boa prática isolar as dependências do projeto.
 
 ```Bash
@@ -45,7 +45,7 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-###3. Instalar as Dependências
+### 3. Instalar as Dependências
 Instale todas as bibliotecas listadas no requirements.txt:
 
 ```Bash
@@ -53,7 +53,7 @@ Instale todas as bibliotecas listadas no requirements.txt:
 pip install -r requirements.txt
 ```
 
-###4. Rodar a API
+### 4. Rodar a API
 Inicie o servidor de desenvolvimento com uvicorn:
 
 ```Bash
@@ -63,7 +63,7 @@ uvicorn main:app --reload
 
 O servidor estará rodando em http://127.0.0.1:8000.
 
-##🧭 Documentação e Uso
+## 🧭 Documentação e Uso
 O FastAPI gera automaticamente a documentação interativa (Swagger UI) para todos os endpoints.
 
 - **Documentação Interativa (Swagger UI):** http://127.0.0.1:8000/docs
@@ -104,7 +104,7 @@ Ao acessar `/convert/fahrenheit-to-celsius/77`:
 ```
 
 
-##☁️ Implantação e CI/CD (Azure DevOps)
+## ☁️ Implantação e CI/CD (Azure DevOps)
 O projeto está configurado para implantação automatizada no Azure App Service (Linux) usando o Azure DevOps Pipelines.
 
 **Arquivo de Pipeline**
@@ -136,9 +136,9 @@ gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
 
 As seguintes variáveis devem ser definidas no Azure DevOps Pipeline:
 
-|Variável|Descrição|Exemplo
-|azureSubscription|Nome da Service Connection configurada no Azure DevOps.|ConexaoAzure
-|webAppName|Nome do Azure App Service onde a aplicação será hospedada.|api-conversor-temp-prod
+|Variável|Descrição|Exemplo|
+|azureSubscription|Nome da Service Connection configurada no Azure DevOps.|ConexaoAzure|
+|webAppName|Nome do Azure App Service onde a aplicação será hospedada.|api-conversor-temp-prod|
 
 **URL de Produção**
 
@@ -146,7 +146,7 @@ Após um deploy bem-sucedido, a API estará acessível em:
 
 https://SEU_WEBAPP_NAME.azurewebsites.net/
 
-##🤝 Contribuições
+## 🤝 Contribuições
 Contribuições são bem-vindas! Se você encontrar um bug ou tiver sugestões de melhoria (como adicionar conversão para Kelvin), sinta-se à vontade para abrir uma Issue ou enviar um Pull Request.
 
 1. Faça o fork do projeto.
@@ -159,7 +159,7 @@ Contribuições são bem-vindas! Se você encontrar um bug ou tiver sugestões d
 
 5. Abra um Pull Request.
 
-##📄 Licença
+## 📄 Licença
 Este projeto está licenciado sob a Licença MIT.
 
 *Desenvolvido com ❤️ por Simone Diana*
