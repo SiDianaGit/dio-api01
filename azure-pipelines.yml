@@ -1,0 +1,85 @@
+# azure-pipelines.yml
+
+trigger:
+- main # O pipeline será acionado por pushes na branch 'main'
+
+variables:
+  # Variáveis para evitar repetição e facilitar a manutenção
+  azureSubscription: 'Assinatura do Azure 1' # IMPORTANTE: Substitua pelo nome da sua Conexão de Serviço
+  webAppName: 'api-conversor-temp'               # IMPORTANTE: Substitua pelo nome do seu App Service criado no Azure
+  pythonVersion: '3.12'
+  vmImageName: 'ubuntu-latest'
+
+# O pipeline é dividido em estágios. Primeiro o Build, depois o Deploy.
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: Build
+    displayName: 'Build Job'
+    pool:
+      vmImage: $(vmImageName) # Usa a imagem de máquina virtual definida nas variáveis
+
+    steps:
+    # Passo 1: Configura a versão do Python no agente de build
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+
+    # Passo 2: Instala as dependências do projeto
+    - script: |
+        python -m venv env
+        source env/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+      displayName: 'Install dependencies'
+
+    # Passo 3: Cria um arquivo .zip com o código e as dependências para o deploy
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: 'Archive files'
+
+    # Passo 4: Publica o arquivo .zip como um "artefato" para que o estágio de Deploy possa usá-lo
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+      displayName: 'Publish Artifact'
+
+- stage: Deploy
+  displayName: 'Deploy Stage'
+  dependsOn: Build # Este estágio só roda se o estágio 'Build' for bem-sucedido
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Job'
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    # Passo 1: Usa o artefato (.zip) que foi publicado pelo estágio de Build
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+      displayName: 'Download artifact from build stage'
+
+    # Passo 2: Implanta o arquivo .zip no Azure App Service
+    - task: AzureWebApp@1
+      displayName: 'Azure Web App Deploy'
+      inputs:
+        azureSubscription: '$(azureSubscription)'
+        appName: '$(webAppName)'
+        package: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
+        # O App Service para Python precisa saber como iniciar a aplicação.
+        # Ele usa o Gunicorn (um servidor WSGI) para rodar o FastAPI (que é um framework ASGI).
+        # UvicornWorker é a ponte entre eles.
+        startupCommand: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app'
