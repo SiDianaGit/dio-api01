@@ -5,7 +5,7 @@ trigger:
 
 variables:
   # Variáveis para evitar repetição e facilitar a manutenção
-  azureSubscription: 'Assinatura do Azure 1' # IMPORTANTE: Substitua pelo nome da sua Conexão de Serviço
+  azureSubscription: 'SiDianaAzureRM' # IMPORTANTE: Substitua pelo nome da sua Conexão de Serviço
   webAppName: 'api-conversor-temp'               # IMPORTANTE: Substitua pelo nome do seu App Service criado no Azure
   pythonVersion: '3.12'
   vmImageName: 'ubuntu-latest'
