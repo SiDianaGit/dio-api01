@@ -18,7 +18,8 @@ stages:
   - job: Build
     displayName: 'Build Job'
     pool:
-      vmImage: $(vmImageName) # Usa a imagem de máquina virtual definida nas variáveis
+      # Usa um Pool Self-Hosted (se você tiver um agente próprio) ou um Hosted (agente gerenciado pela Microsoft)
+      name: MeuAgenteLocal
 
     steps:
     # Passo 1: Configura a versão do Python no agente de build
@@ -60,7 +61,8 @@ stages:
   - job: Deploy
     displayName: 'Deploy Job'
     pool:
-      vmImage: $(vmImageName)
+      # Usa um Pool Self-Hosted (se você tiver um agente próprio) ou um Hosted (agente gerenciado pela Microsoft)
+      name: MeuAgenteLocal
 
     steps:
     # Passo 1: Usa o artefato (.zip) que foi publicado pelo estágio de Build
