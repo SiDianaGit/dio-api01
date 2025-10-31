@@ -144,7 +144,8 @@ As seguintes variáveis devem ser definidas no Azure DevOps Pipeline:
 
 Após um deploy bem-sucedido, a API estará acessível em:
 
-https://SEU_WEBAPP_NAME.azurewebsites.net/
+*api-conversor-temp-awhgb8hmexbba4cq.westus2-01.azurewebsites.net*
+OBS.: Com plano F1 gratuito.
 
 ## 🤝 Contribuições
 Contribuições são bem-vindas! Se você encontrar um bug ou tiver sugestões de melhoria (como adicionar conversão para Kelvin), sinta-se à vontade para abrir uma Issue ou enviar um Pull Request.
